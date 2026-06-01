@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CloudOps Student Records</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: #eef2f7;
+      color: #111827;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #0f172a;
+      color: white;
+      padding: 28px 22px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .logo-text h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .logo-text p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .nav-item {
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    .nav-item.active {
+      background: #1e293b;
+      color: white;
+    }
+
+    .main {
+      flex: 1;
+      padding: 32px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .page-title h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -0.5px;
+    }
+
+    .page-title p {
+      margin: 8px 0 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .status-pill {
+      padding: 10px 14px;
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+      border: 1px solid #e5e7eb;
+    }
+
+    .stat-card p {
+      margin: 0 0 10px;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    .stat-card h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+      border: 1px solid #e5e7eb;
+    }
+
+    .panel h2 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+
+    .panel-subtitle {
+      margin: 0 0 22px;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 13px;
+      margin-bottom: 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    input[type="file"] {
+      background: #f9fafb;
+      cursor: pointer;
+    }
+
+    .primary-button {
+      width: 100%;
+      padding: 13px 16px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .primary-button:hover {
+      background: #1d4ed8;
+    }
+
+    .primary-button:active {
+      transform: scale(0.99);
+    }
+
+    .delete-form {
+      margin: 0;
+    }
+
+    .delete-button {
+      background: #dc2626;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .delete-button:hover {
+      background: #b91c1c;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      text-align: left;
+      padding: 14px 12px;
+      color: #6b7280;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #374151;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .student-img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .placeholder-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #e5e7eb;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .name-cell {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .course-badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      padding: 40px;
+      text-align: center;
+      color: #6b7280;
+      background: #f9fafb;
+      border-radius: 14px;
+      border: 1px dashed #d1d5db;
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    @media (max-width: 1000px) {
+      .app-shell {
+        display: block;
+      }
+
+      .sidebar {
+        width: 100%;
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        gap: 16px;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">CO</div>
+        <div class="logo-text">
+          <h2>CloudOps Lab</h2>
+          <p>Student Records System</p>
+        </div>
+      </div>
+
+      <div class="nav-item active">Dashboard</div>
+      <div class="nav-item">Student Records</div>
+      <div class="nav-item">MySQL Database</div>
+      <div class="nav-item">AWS Migration Later</div>
+      <div class="nav-item">Monitoring Later</div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="page-title">
+          <h1>CloudOps Student Records</h1>
+          <p>Local Node.js application connected to a MySQL database.</p>
+        </div>
+
+        <div class="status-pill">
+          System Online · MySQL Connected
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p>Total Students</p>
+          <h2><%= students.length %></h2>
+        </div>
+
+        <div class="stat-card">
+          <p>Database</p>
+          <h2>MySQL</h2>
+        </div>
+
+        <div class="stat-card">
+          <p>Environment</p>
+          <h2>Local</h2>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <section class="panel">
+          <h2>Add Student</h2>
+          <p class="panel-subtitle">Create a new student record and optionally upload an image.</p>
+
+          <form action="/students" method="POST" enctype="multipart/form-data">
+            <label>Student Name</label>
+            <input type="text" name="name" placeholder="Example: Shaheer Tariq" required>
+
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="example@email.com" required>
+
+            <label>Course Name</label>
+            <input type="text" name="course" placeholder="Example: Cloud Computing" required>
+
+            <label>Student Image</label>
+            <input type="file" name="image">
+
+            <button class="primary-button" type="submit">Add Student Record</button>
+          </form>
+
+          <p class="footer-note">
+            Later, image uploads will be moved from local storage to Amazon S3.
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>Student List</h2>
+          <p class="panel-subtitle">Records are fetched directly from the local MySQL database.</p>
+
+          <% if (students.length === 0) { %>
+            <div class="empty-state">
+              No student records found. Add your first student from the form.
+            </div>
+          <% } else { %>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Course</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <% students.forEach(function(student) { %>
+                    <tr>
+                      <td>
+                        <% if (student.image_key) { %>
+                          <img class="student-img" src="/uploads/<%= student.image_key %>" alt="Student Image">
+                        <% } else { %>
+                          <div class="placeholder-img">N/A</div>
+                        <% } %>
+                      </td>
+
+                      <td class="name-cell"><%= student.name %></td>
+                      <td><%= student.email %></td>
+                      <td><span class="course-badge"><%= student.course %></span></td>
+                      <td><%= student.created_at %></td>
+
+                      <td>
+                        <form class="delete-form" action="/students/<%= student.id %>/delete" method="POST">
+                          <button
+                            class="delete-button"
+                            type="submit"
+                            onclick="return confirm('Delete this student record?');"
+                          >
+                            Delete
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
