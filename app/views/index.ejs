@@ -1,3 +1,4 @@
+<% const environmentLabel = typeof appEnv !== "undefined" ? appEnv : "EC2"; %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -356,7 +357,7 @@
       <div class="topbar">
         <div class="page-title">
           <h1>CloudOps Student Records</h1>
-          <p>Local Node.js application connected to a MySQL database.</p>
+          <p>Node.js application running on <%= environmentLabel %> and connected to a MySQL database.</p>
         </div>
 
         <div class="status-pill">
@@ -377,7 +378,7 @@
 
         <div class="stat-card">
           <p>Environment</p>
-          <h2>Local</h2>
+          <h2><%= environmentLabel %></h2>
         </div>
       </div>
 
@@ -409,7 +410,7 @@
 
         <section class="panel">
           <h2>Student List</h2>
-          <p class="panel-subtitle">Records are fetched directly from the local MySQL database.</p>
+          <p class="panel-subtitle">Records are fetched directly from the MySQL database on <%= environmentLabel %>.</p>
 
           <% if (students.length === 0) { %>
             <div class="empty-state">

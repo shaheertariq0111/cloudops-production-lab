@@ -60,7 +60,10 @@ app.get("/", (req, res) => {
       return res.status(500).send("Database error");
     }
 
-    res.render("index", { students: results });
+    res.render("index", {
+      students: results,
+      appEnv: process.env.APP_ENV || "Local"
+    });
   });
 });
 
@@ -106,6 +109,7 @@ app.get("/health", (req, res) => {
     status: "OK",
     service: "cloudops-student-records",
     database: "connected",
+    environment: process.env.APP_ENV || "EC2"
   });
 });
 

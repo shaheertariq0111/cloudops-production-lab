@@ -2,5 +2,8 @@ app/node_modules/
 app/.env
 app/uploads/*
 !app/uploads/.gitkeep
+keys/
+*.pem
+*.zip
 *.log
 .DS_Store
