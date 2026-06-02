@@ -404,7 +404,7 @@
           </form>
 
           <p class="footer-note">
-            Later, image uploads will be moved from local storage to Amazon S3.
+            Student images are uploaded securely to Amazon S3 and displayed using temporary signed URLs.
           </p>
         </section>
 
@@ -434,8 +434,8 @@
                   <% students.forEach(function(student) { %>
                     <tr>
                       <td>
-                        <% if (student.image_key) { %>
-                          <img class="student-img" src="/uploads/<%= student.image_key %>" alt="Student Image">
+                        <% if (student.image_url) { %>
+                          <img class="student-img" src="<%= student.image_url %>" alt="Student Image">
                         <% } else { %>
                           <div class="placeholder-img">N/A</div>
                         <% } %>
