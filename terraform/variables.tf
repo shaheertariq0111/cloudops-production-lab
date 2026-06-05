@@ -15,3 +15,15 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
+
+variable "vpc_cidr" {
+  description = "CIDR block for the Terraform-managed VPC."
+  type        = string
+  default     = "10.20.0.0/16"
+}
+
+variable "public_subnet_cidr" {
+  description = "CIDR block for the public subnet used by EC2."
+  type        = string
+  default     = "10.20.1.0/24"
+}

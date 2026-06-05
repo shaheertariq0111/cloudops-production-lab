@@ -1,3 +1,5 @@
-aws_region   = "us-east-1"
-project_name = "cloudops-terraform-lab"
-environment  = "dev"
+aws_region         = "us-east-1"
+project_name       = "cloudops-terraform-lab"
+environment        = "dev"
+vpc_cidr           = "10.20.0.0/16"
+public_subnet_cidr = "10.20.1.0/24"
