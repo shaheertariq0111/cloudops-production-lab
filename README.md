@@ -298,3 +298,19 @@ Documentation: In progress
 ## Resume Bullet
 
 Built and deployed a production-style AWS CloudOps lab using EC2, Nginx, Node.js, PM2, Amazon RDS MySQL, private S3 storage, IAM roles, security groups, and CloudWatch monitoring, including database migration, private object storage, operational health checks, and infrastructure validation screenshots.
+
+## Terraform Infrastructure Automation
+
+This repository includes a Terraform Infrastructure as Code version of the AWS CloudOps lab.
+
+Terraform documentation:
+
+docs/terraform-infrastructure.md
+
+Terraform folder:
+
+terraform/
+
+The Terraform version provisions the AWS networking layer, security groups, private S3 bucket, IAM role, EC2 instance, and private RDS MySQL database.
+
+Sensitive files such as terraform.tfvars, Terraform state files, .env files, and PEM keys are intentionally excluded from Git.
