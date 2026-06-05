@@ -314,3 +314,5 @@ terraform/
 The Terraform version provisions the AWS networking layer, security groups, private S3 bucket, IAM role, EC2 instance, and private RDS MySQL database.
 
 Sensitive files such as terraform.tfvars, Terraform state files, .env files, and PEM keys are intentionally excluded from Git.
+
+Terraform Project 2 was fully built, verified, screenshotted, and then destroyed for cost control. The Terraform code remains available to recreate the AWS infrastructure when needed.
