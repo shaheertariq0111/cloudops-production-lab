@@ -39,3 +39,8 @@ variable "private_subnet_b_cidr" {
   type        = string
   default     = "10.20.12.0/24"
 }
+
+variable "allowed_ssh_cidr" {
+  description = "Public IP CIDR allowed to SSH into the future EC2 instance. Example: 203.0.113.10/32"
+  type        = string
+}

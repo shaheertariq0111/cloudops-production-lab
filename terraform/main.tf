@@ -91,3 +91,64 @@ resource "aws_route_table_association" "private_b" {
   subnet_id      = aws_subnet.private_b.id
   route_table_id = aws_route_table.private.id
 }
+
+resource "aws_security_group" "ec2_app" {
+  name        = "${var.project_name}-${var.environment}-ec2-sg"
+  description = "Security group for the future EC2 web application server."
+  vpc_id      = aws_vpc.main.id
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ec2-sg"
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "ec2_ssh_from_my_ip" {
+  security_group_id = aws_security_group.ec2_app.id
+  description       = "Allow SSH from my current public IP only."
+  cidr_ipv4         = var.allowed_ssh_cidr
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "ec2_http_from_internet" {
+  security_group_id = aws_security_group.ec2_app.id
+  description       = "Allow HTTP web traffic from the internet."
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "ec2_all_outbound" {
+  security_group_id = aws_security_group.ec2_app.id
+  description       = "Allow all outbound traffic from EC2."
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
+
+resource "aws_security_group" "rds" {
+  name        = "${var.project_name}-${var.environment}-rds-sg"
+  description = "Security group for the future private RDS MySQL database."
+  vpc_id      = aws_vpc.main.id
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-rds-sg"
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "rds_mysql_from_ec2" {
+  security_group_id            = aws_security_group.rds.id
+  description                  = "Allow MySQL from the EC2 application security group only."
+  referenced_security_group_id = aws_security_group.ec2_app.id
+  from_port                    = 3306
+  to_port                      = 3306
+  ip_protocol                  = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "rds_all_outbound" {
+  security_group_id = aws_security_group.rds.id
+  description       = "Allow all outbound traffic from RDS security group."
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
