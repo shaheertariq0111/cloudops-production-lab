@@ -20,3 +20,7 @@ terraform.tfvars
 terraform.tfvars.json
 crash.log
 crash.*.log
+
+# Terraform plan files
+tfplan
+*.tfplan
