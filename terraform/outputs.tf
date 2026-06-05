@@ -62,3 +62,23 @@ output "ec2_instance_profile_name" {
   description = "Name of the IAM instance profile for the future EC2 instance."
   value       = aws_iam_instance_profile.ec2_app.name
 }
+
+output "ec2_instance_id" {
+  description = "ID of the Terraform-managed EC2 instance."
+  value       = aws_instance.app_server.id
+}
+
+output "ec2_public_ip" {
+  description = "Public IP address of the Terraform-managed EC2 instance."
+  value       = aws_instance.app_server.public_ip
+}
+
+output "ec2_public_dns" {
+  description = "Public DNS name of the Terraform-managed EC2 instance."
+  value       = aws_instance.app_server.public_dns
+}
+
+output "ec2_ami_id" {
+  description = "Ubuntu AMI ID selected for the EC2 instance."
+  value       = data.aws_ami.ubuntu.id
+}

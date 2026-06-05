@@ -44,3 +44,15 @@ variable "allowed_ssh_cidr" {
   description = "Public IP CIDR allowed to SSH into the future EC2 instance. Example: 203.0.113.10/32"
   type        = string
 }
+
+variable "ec2_key_name" {
+  description = "Name of the existing AWS EC2 key pair to use for SSH."
+  type        = string
+  default     = "cloudops-terraform-key"
+}
+
+variable "ec2_instance_type" {
+  description = "EC2 instance type for the Terraform-managed app server."
+  type        = string
+  default     = "t3.micro"
+}
