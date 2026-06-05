@@ -42,3 +42,23 @@ output "rds_security_group_id" {
   description = "ID of the RDS database security group."
   value       = aws_security_group.rds.id
 }
+
+output "s3_upload_bucket_name" {
+  description = "Name of the private S3 uploads bucket."
+  value       = aws_s3_bucket.app_uploads.bucket
+}
+
+output "s3_upload_bucket_arn" {
+  description = "ARN of the private S3 uploads bucket."
+  value       = aws_s3_bucket.app_uploads.arn
+}
+
+output "ec2_iam_role_name" {
+  description = "Name of the IAM role for the future EC2 instance."
+  value       = aws_iam_role.ec2_app.name
+}
+
+output "ec2_instance_profile_name" {
+  description = "Name of the IAM instance profile for the future EC2 instance."
+  value       = aws_iam_instance_profile.ec2_app.name
+}

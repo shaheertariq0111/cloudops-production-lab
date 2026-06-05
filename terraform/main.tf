@@ -2,6 +2,23 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+data "aws_iam_policy_document" "ec2_assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "random_id" "bucket_suffix" {
+  byte_length = 4
+}
+
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
@@ -151,4 +168,102 @@ resource "aws_vpc_security_group_egress_rule" "rds_all_outbound" {
   description       = "Allow all outbound traffic from RDS security group."
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"
+}
+
+resource "aws_s3_bucket" "app_uploads" {
+  bucket = "${var.project_name}-${var.environment}-uploads-${random_id.bucket_suffix.hex}"
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-uploads"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "app_uploads" {
+  bucket = aws_s3_bucket.app_uploads.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "app_uploads" {
+  bucket = aws_s3_bucket.app_uploads.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "app_uploads" {
+  bucket = aws_s3_bucket.app_uploads.id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_iam_role" "ec2_app" {
+  name               = "${var.project_name}-${var.environment}-ec2-role"
+  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role.json
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ec2-role"
+  }
+}
+
+data "aws_iam_policy_document" "ec2_s3_access" {
+  statement {
+    sid    = "AllowListUploadsBucket"
+    effect = "Allow"
+
+    actions = [
+      "s3:ListBucket"
+    ]
+
+    resources = [
+      aws_s3_bucket.app_uploads.arn
+    ]
+  }
+
+  statement {
+    sid    = "AllowObjectAccessInUploadsBucket"
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject"
+    ]
+
+    resources = [
+      "${aws_s3_bucket.app_uploads.arn}/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "ec2_s3_access" {
+  name        = "${var.project_name}-${var.environment}-ec2-s3-access"
+  description = "Allow future EC2 instance to access only the Terraform-managed uploads S3 bucket."
+  policy      = data.aws_iam_policy_document.ec2_s3_access.json
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ec2-s3-access"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_s3_access" {
+  role       = aws_iam_role.ec2_app.name
+  policy_arn = aws_iam_policy.ec2_s3_access.arn
+}
+
+resource "aws_iam_instance_profile" "ec2_app" {
+  name = "${var.project_name}-${var.environment}-ec2-instance-profile"
+  role = aws_iam_role.ec2_app.name
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ec2-instance-profile"
+  }
 }
