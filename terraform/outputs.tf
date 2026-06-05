@@ -82,3 +82,23 @@ output "ec2_ami_id" {
   description = "Ubuntu AMI ID selected for the EC2 instance."
   value       = data.aws_ami.ubuntu.id
 }
+
+output "rds_endpoint" {
+  description = "Connection endpoint for the private RDS MySQL instance."
+  value       = aws_db_instance.mysql.endpoint
+}
+
+output "rds_address" {
+  description = "DNS address of the private RDS MySQL instance."
+  value       = aws_db_instance.mysql.address
+}
+
+output "rds_port" {
+  description = "Port used by the private RDS MySQL instance."
+  value       = aws_db_instance.mysql.port
+}
+
+output "rds_database_name" {
+  description = "Initial database name."
+  value       = aws_db_instance.mysql.db_name
+}

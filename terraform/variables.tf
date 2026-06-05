@@ -56,3 +56,38 @@ variable "ec2_instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "db_name" {
+  description = "Initial MySQL database name."
+  type        = string
+  default     = "studentrecords"
+}
+
+variable "db_username" {
+  description = "Master username for the RDS MySQL instance."
+  type        = string
+  default     = "cloudadmin"
+}
+
+variable "db_password" {
+  description = "Master password for the RDS MySQL instance. Store only in ignored terraform.tfvars, never commit it."
+  type        = string
+  sensitive   = true
+
+  validation {
+    condition     = length(var.db_password) >= 12
+    error_message = "The database password must be at least 12 characters."
+  }
+}
+
+variable "db_instance_class" {
+  description = "RDS instance class for the MySQL database."
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "db_allocated_storage" {
+  description = "Allocated RDS storage in GB."
+  type        = number
+  default     = 20
+}
