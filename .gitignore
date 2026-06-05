@@ -11,3 +11,12 @@ keys/
 /node_modules/
 /package.json
 /package-lock.json
+
+# Terraform local files
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+terraform.tfvars.json
+crash.log
+crash.*.log
