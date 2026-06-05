@@ -27,3 +27,15 @@ variable "public_subnet_cidr" {
   type        = string
   default     = "10.20.1.0/24"
 }
+
+variable "private_subnet_a_cidr" {
+  description = "CIDR block for the first private subnet used by future RDS."
+  type        = string
+  default     = "10.20.11.0/24"
+}
+
+variable "private_subnet_b_cidr" {
+  description = "CIDR block for the second private subnet used by future RDS."
+  type        = string
+  default     = "10.20.12.0/24"
+}
